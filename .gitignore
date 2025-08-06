@@ -1,0 +1,18 @@
+# Ignore virtual environment
+env/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# SQLite and logs (optional)
+*.sqlite3
+*.log
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Django static/media (if any)
+staticfiles/
+media/
