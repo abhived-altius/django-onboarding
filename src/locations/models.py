@@ -19,7 +19,7 @@ class State(models.Model):
     id              = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name            = models.CharField(max_length=100)
     state_code      = models.CharField(max_length=10, unique=True)
-    gst_code        = models.CharField(max_length=3,unique=True, null=True,blank=True)
+    gst_code        = models.CharField(max_length=3, null=True,blank=True)
     my_country      = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="states")
 
     def __str__(self) -> str:
