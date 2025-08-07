@@ -1,4 +1,5 @@
 from django.db import models
+from accounts.models import CustomUser
 import uuid
 
 # Create your models here.
@@ -9,7 +10,7 @@ class Country(models.Model):
     country_code   = models.CharField(max_length =10,unique=True)
     curr_symbol    = models.CharField(max_length =5)
     phone_code     = models.CharField(max_length =10, unique=True)
-
+    my_user        = models.ForeignKey(CustomUser, null=True,on_delete=models.SET_NULL)
     def __str__(self) -> str:
         return self.name
 

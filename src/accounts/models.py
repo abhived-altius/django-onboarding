@@ -1,6 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 from django.db import models
-from locations.models import Country
 
 # Create your models here.
 
@@ -27,7 +26,6 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(unique=True)
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL,null=True)
     
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
