@@ -10,7 +10,7 @@ class Country(models.Model):
     country_code   = models.CharField(max_length =10,unique=True)
     curr_symbol    = models.CharField(max_length =5)
     phone_code     = models.CharField(max_length =10, unique=True)
-    my_user        = models.ForeignKey(CustomUser, null=True,on_delete=models.SET_NULL)
+    my_user        = models.ForeignKey(CustomUser,on_delete=models.CASCADE)
     def __str__(self) -> str:
         return self.name
 
