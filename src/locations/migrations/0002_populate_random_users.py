@@ -9,14 +9,8 @@ def create_random_users(apps, schema_editor):
     # try to get existing users
     users = list(CustomUser.objects.all())
     
-    # in case there are no existing users
     if not users:
-        fallback_user = CustomUser.objects.create_user(
-            email = "user@example.com",
-            password="testpass123"
-        )
-        users.append(fallback_user)
-        
+        return
     
     for country in Country.objects.filter(my_user__isnull=True):
         country.my_user = random.choice(users)
