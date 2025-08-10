@@ -1,12 +1,20 @@
 from django.urls import path
+from rest_framework.routers import DefaultRouter
 from .views import (
+    CityListCreateAPIView,
+    CityRetrieveUpdateDestroyAPIView,
     CountryListCreateAPIView,
     CountryRetrieveUpdateDestroyAPIView,
     StateListCreateAPIView,
-    StateRetrieveUpdateDestroyAPIView
+    StateRetrieveUpdateDestroyAPIView,
+    CountryNestedViewSet,
 )
 
 app_name = 'locations'
+
+router = DefaultRouter()
+router.register(r'nested-countries', CountryNestedViewSet, basename='nested-country')
+
 
 urlpatterns = [
     # Country URLs
@@ -16,5 +24,10 @@ urlpatterns = [
     # State URLS
     path('countries/<uuid:country_pk>/states/', StateListCreateAPIView.as_view(), name='state-list'),
     path('countries/<uuid:country_pk>/states/<uuid:pk>/', StateRetrieveUpdateDestroyAPIView.as_view(), name='state-detail'),
+    path('countries/<uuid:country_pk>/states/', StateListCreateAPIView.as_view(), name='state-list'),
+    path('countries/<uuid:country_pk>/states/<uuid:pk>/', StateRetrieveUpdateDestroyAPIView.as_view(), name='state-detail'),
+    path('countries/<uuid:country_pk>/states/<uuid:state_pk>/cities/', CityListCreateAPIView.as_view(), name='city-list'),
+    path('countries/<uuid:country_pk>/states/<uuid:state_pk>/cities/<uuid:pk>/', CityRetrieveUpdateDestroyAPIView.as_view(), name='city-detail'),
 ]
 
+urlpatterns += router.urls

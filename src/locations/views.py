@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, viewsets, pagination
 from .models import Country, State, City
-from .serializers import CountrySerializer, StateSerializer, CitySerializer
+from .serializers import CountrySerializer, StateSerializer, CitySerializer, NestedCountrySerializer
 from rest_framework.pagination import CursorPagination
 
 # Create your views here.
@@ -100,3 +100,15 @@ class CityRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
             my_state__pk=state_pk,
             my_state__my_country__my_user=self.request.user
         )
+
+
+class CountryNestedViewSet(viewsets.ModelViewSet):
+    serializer_class = NestedCountrySerializer
+    permission_classes = [permissions.IsAuthenticated]
+    pagination_class = CountryCursorPagination
+    
+    def get_queryset(self):
+        return Country.objects.filter(my_user=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save(my_user=self.request.user)

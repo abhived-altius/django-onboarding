@@ -22,6 +22,9 @@ class State(models.Model):
     gst_code        = models.CharField(max_length=3, null=True,blank=True)
     my_country      = models.ForeignKey(Country, on_delete=models.CASCADE, related_name="states")
 
+    class Meta:
+        unique_together = ['my_country', 'name']
+
     def __str__(self) -> str:
         return self.name
 
@@ -35,6 +38,13 @@ class City(models.Model):
     num_of_adult_males      = models.PositiveIntegerField()
     num_of_adult_females    = models.PositiveIntegerField()
     my_state                = models.ForeignKey(State, on_delete=models.CASCADE, related_name="cities")
+
+    class Meta:
+        # Enforce uniqueness for both name-in-state and code-in-state.
+        unique_together = [
+            ['my_state', 'name'],
+            ['my_state', 'city_code']
+        ]
 
     def __str__(self) -> str:
         return self.name

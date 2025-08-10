@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Country, State, City
+from drf_writable_nested.serializers import WritableNestedModelSerializer
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -100,3 +101,46 @@ class CitySerializer(serializers.ModelSerializer):
             )
 
         return data
+    
+class NestedCitySerializer(WritableNestedModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'name', 'city_code', 'phone_code', 'population', 'avg_age', 'num_of_adult_males', 'num_of_adult_females']
+    
+    def validate(self, data):
+        """
+        Check that population is greater than the sum of adults.
+        """
+        # Get the relevant fields from the data dictionary for this city
+        population = data.get('population')
+        males = data.get('num_of_adult_males', 0)
+        females = data.get('num_of_adult_females', 0)
+
+        # Check if population was provided and if the validation fails
+        if population is not None and population <= (males + females):
+            # Raise an error associated with the 'population' field
+            raise serializers.ValidationError({
+                "population": "Population must be greater than the sum of adult males and females."
+            })
+        
+        # Always return the full validated data dictionary
+        return data
+
+
+
+class NestedStateSerializer(WritableNestedModelSerializer):
+    cities = NestedCitySerializer(many=True)
+
+    class Meta:
+        model = State
+        fields = ['id', 'name', 'state_code', 'gst_code', 'cities']
+
+
+
+class NestedCountrySerializer(WritableNestedModelSerializer):
+    states = NestedStateSerializer(many=True)
+
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'country_code', 'curr_symbol', 'phone_code', 'my_user', 'states']
+        read_only_fields = ['my_user']
