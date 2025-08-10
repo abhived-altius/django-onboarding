@@ -43,12 +43,3 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
     
-class LogoutAPIView(APIView):
-    """ 
-    Handles user logout by deleting the auth token.
-    """
-    permission_classes = [permissions.IsAuthenticated]
-    
-    def post(self, request):
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
