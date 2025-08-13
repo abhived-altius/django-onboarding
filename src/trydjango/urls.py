@@ -28,7 +28,9 @@ urlpatterns = [
 
     # path('api/login/',obtain_auth_token,name = 'api-login'),
     path('api/users/', include('accounts.urls')),
-    path('api/', include('locations.urls',namespace='locations'))
+    path('api/', include('locations.urls',namespace='locations')),
+    
+    path('silk/',include('silk.urls',namespace='silk'))
 ]
 
 

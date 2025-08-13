@@ -108,7 +108,7 @@ class CountryNestedViewSet(viewsets.ModelViewSet):
     pagination_class = CountryCursorPagination
     
     def get_queryset(self):
-        return Country.objects.filter(my_user=self.request.user)
+        return Country.objects.filter(my_user=self.request.user).prefetch_related('states__cities')
 
     def perform_create(self, serializer):
         serializer.save(my_user=self.request.user)
